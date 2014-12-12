@@ -3,10 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="nl.mprog.N_puzzle6182097.MainActivity" >
 
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
-
+	<item 
+		android:id="@+id/picList"
+		android:title="Other Image"
+		android:icon="@android:drawable/ic_menu_compass" />
+	<item 
+		android:id="@+id/easy"
+		android:title="3 x 3"
+		android:icon="@android:drawable/ic_menu_directions" />
+	<item 
+		android:id="@+id/medium"
+		android:title="4 x 4"
+		android:icon="@android:drawable/ic_menu_help" />
+	<item 
+		android:id="@+id/hard"
+		android:title="5 x 5"
+		android:icon="@android:drawable/ic_menu_delete" />
+	<item 
+		android:id="@+id/mainMenu"
+		android:title="Custom level"
+		android:icon="@android:drawable/ic_menu_myplaces" />
 </menu>
