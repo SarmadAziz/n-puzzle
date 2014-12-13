@@ -2,7 +2,6 @@ package nl.mprog.N_puzzle6182097;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,41 +9,36 @@ import android.widget.ImageView;
 
 public class GameAdapter extends BaseAdapter {
 
-	private ImageView[] viewss;
-	private Tile[] images;
 	private Context myContext;
-	int count = 0;
-	public int emptyTilePos;
-	public Bitmap[] cropImg;
-	int[] prevImgPos;
-	Tile[] prevImgPosTile;
+	
+	// array variables
+	private ImageView[] views;
+	private Tile[] images;
+	private Bitmap[] cropImg;
+	
+	// int variables
+	private int prevImgCount;
+	private int moveCount = 0;
+	private int emptyTilePos;
 	
 	// Constructor
 	public GameAdapter(Context c, Bitmap[] cropped, int[] imgPos) {
-		myContext = c;	
-		cropImg = cropped;
-		prevImgPos = new int[imgPos.length];
-		viewss = new ImageView[cropped.length];
-		images = new Tile[cropped.length];
-		prevImgPosTile = new Tile[imgPos.length];
-		for (int x = 0; x < cropped.length; x++){
-			viewss[x] = new ImageView(myContext);
+		int imgLength = cropped.length;
+		myContext     = c;	
+		cropImg       = cropped;
+		views         = new ImageView[imgLength];
+		images        = new Tile[imgLength];
+		prevImgCount  = imgPos.length;
+		
+		for (int x = 0; x < imgLength; x++){
+			views[x]  = new ImageView(myContext);
 			images[x] = new Tile(cropped[x], x);
-			if (prevImgPos.length == cropped.length){
-				prevImgPos[x] = imgPos[x];
-			}
-			if (prevImgPosTile.length == cropped.length){
+			
+			if (prevImgCount == imgLength){
 				images[x] = new Tile(cropped[imgPos[x]], imgPos[x]);
 			}
 		}
-		if (images != null){
-			for (int i = 0; i < images.length; i++){
-				Log.d("images", images[i].tag+"");
-			}
-		}
-		
 		getEmptyTile();
-		Log.d("test", emptyTilePos + "");
 	}
 
 	@Override
@@ -75,8 +69,8 @@ public class GameAdapter extends BaseAdapter {
 	// create a new ImageView when requested
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ImageView imgView = viewss[position];
-		if (prevImgPosTile.length == viewss.length){
+		ImageView imgView = views[position];
+		if (prevImgCount == views.length){
 			imgView.setImageBitmap(images[position].image);
 		} else {
 			imgView.setImageBitmap(images[position].image);
@@ -84,6 +78,7 @@ public class GameAdapter extends BaseAdapter {
 		return imgView;
 	}
 
+	// swap 2 bitmap images with each other
 	public void swap(int position){
 		Tile temp = images[position];
 		images[position] = images[emptyTilePos];
@@ -92,13 +87,14 @@ public class GameAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 	
+	// shuffle the game in reverse order
 	public void shuffle(){
-		// emptyTilePos = cropImg.length - 1;
 		int max = cropImg.length - 2;
 		for (int x = 0; x < cropImg.length - 1; x++){
-			viewss[x] = new ImageView(myContext);
+			views[x] = new ImageView(myContext);
 			images[max-x] = new Tile(cropImg[x], x);
 		}
+		// if the tiles are uneven, swap tile 1 and 2
 		if (cropImg.length % 2 == 0){
 			Tile temp = images[max];
 			images[max] = images[max - 1];
@@ -107,24 +103,23 @@ public class GameAdapter extends BaseAdapter {
 		notifyDataSetChanged(); 
 	}
 	
+	// swap when image is adjacent to empty tile
 	public boolean swapRule(int pos, int block){		
-		// if pos not adjecent to empty tile, don't swap
-		getEmptyTile();
 		if (pos - 1 != emptyTilePos && pos + 1 != emptyTilePos &&
 				pos - block != emptyTilePos && pos + block != emptyTilePos){
 			return false;
 		}
 		
 		swap(pos);
-		count++;
-		
+		moveCount++;
 		return true;
 	}
 	
 	public int getNumOfMoves(int previousMoves){
-		return count + previousMoves;
+		return moveCount + previousMoves;
 	}
 	
+	// check if game is won
 	public boolean won(){
 		for (int x = 0; x < images.length; x++){
 			if (images[x].tag != x){
@@ -134,6 +129,7 @@ public class GameAdapter extends BaseAdapter {
 		return true;
 	}
 
+	// remember the position of the imgTags to resume future game
 	public int[] rememberedImgPos(){
 		int j = getCount();
 		int imageAtPos[] = new int[j];

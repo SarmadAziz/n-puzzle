@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 public class MainMenu extends ActionBarActivity {
@@ -16,18 +15,20 @@ public class MainMenu extends ActionBarActivity {
 		setContentView(R.layout.main_menu);
 	}
 	
+	// open image list
 	public void play(View v) {
     	Intent i = new Intent(this, PicList.class);
     	startActivity(i);  	
     }
 	
-	public void scoreBoard(View v) {
-    	Intent i = new Intent(this, ScoreBoard.class);
+	// open settings
+	public void settings(View v) {
+    	Intent i = new Intent(this, Settings.class);
     	startActivity(i);  	
     }
 	
+	// resume gameplay
 	public void resume(View v) {
-		Button resume = (Button) findViewById(R.id.resume);
 		SharedPreferences prefs = getSharedPreferences("myName", MODE_PRIVATE);
 		if (prefs.getInt("image", 4) != -1){
 			Intent i = new Intent(this, Game.class);
@@ -37,7 +38,6 @@ public class MainMenu extends ActionBarActivity {
 	    	startActivity(i);
 		} else {
 			Toast.makeText(this, "No saved gameplay was found!", Toast.LENGTH_LONG).show();
-			resume.setVisibility(View.GONE);
 		}
     }
 }

@@ -17,18 +17,20 @@ public class Won extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.won);
 		
+		// get data from intent
 		Bundle extras = getIntent().getExtras();
+		int resource  = extras.getInt("imageToDisplay");
+		int moves     = extras.getInt("moves");
 		
-		TextView youWin = (TextView) findViewById(R.id.textView1);
-		youWin.setText("You won with " + extras.getInt("moves") + " moves!");
+		// set you win text
+		TextView youWin = (TextView) findViewById(R.id.you_win);
+		youWin.setText("You won with " + moves + " moves!");
 		
+		// display won image resized
 		ImageView img = (ImageView) findViewById(R.id.single_image);
-        int resource = extras.getInt("imageToDisplay");
-        
         BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize = 8;
 		smalImg = BitmapFactory.decodeResource(this.getResources(), resource, options);
-        
         img.setImageBitmap(smalImg);
 	}
 	

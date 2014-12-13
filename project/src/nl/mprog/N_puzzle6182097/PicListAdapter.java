@@ -35,8 +35,7 @@ public class PicListAdapter extends BaseAdapter {
 			for(int i = 0; i < j; i++)
 				if(list[i].getName().startsWith("img_"))
 					images[index++] = list[i].getInt(null);
-		} catch(Exception e) {}
-		// safer: catch IllegalArgumentException & IllegalAccessException
+		} catch(Exception IllegalArgumentException) {}
 
 	}
 
@@ -64,30 +63,22 @@ public class PicListAdapter extends BaseAdapter {
 		ImageView imgView;
 
 		if(convertView == null) {
-			// create a new view
 			imgView = new ImageView(myContext);
-			//imgView.setLayoutParams(new GridView.LayoutParams(100,100));
 		} else {
-			// recycle an old view (it might have old thumbs in it!)
+			// recycle an old view 
 			imgView = (ImageView) convertView;
 		}
 
 		if(cachedImg[position] == null) {
-		
-			// resize the image 
+			// resize and store the image 
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize = 32;
 			Bitmap resizedImg = BitmapFactory.decodeResource(myContext.getResources(), images[position], options);
-
-			// store the resized thumb in a cache so we don't have to re-generate it
 			cachedImg[position] = resizedImg;
 		}
 		
 		imgView.setImageBitmap(cachedImg[position]);
-
 		return imgView;
 	}
-
-	
 }
 
